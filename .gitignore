@@ -1,0 +1,37 @@
+# KiCad
+*.bak
+*.bck
+*.kicad_sch-bak
+*.kicad_pcb-bak
+*.kicad_prl
+*.kicad_pro.user
+*.kicad_sch.lck
+*.kicad_pcb.lck
+_autosave-*
+*-cache.lib
+*.net
+*.dcm
+*.kicad_prl
+
+# KiCad 6/7/8/9 - generated
+**/fp-info-cache
+**/sym-lib-table
+**/fp-lib-table
+
+# Plots / fabrication outputs (keep fab/ tracked, but ignore accidental exports elsewhere)
+*.gbr
+*.gtl
+*.gbl
+*.gts
+*.gbs
+*.gto
+*.gbo
+*.gm1
+*.drl
+*.zip
+*.csv
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
