@@ -1,5 +1,9 @@
 # EUB-PSU “Hearth”
 
+<p align="center">
+	<img src="docs/assets/logo.png" width="420" alt="Hearth logo">
+</p>
+
 A **power core** for the EUB series.
 
 - Designed for home use: prioritizes friendliness and peace-of-mind over ruggedness
