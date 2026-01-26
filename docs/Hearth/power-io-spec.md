@@ -13,6 +13,8 @@ Rev0 has **no MCU / no firmware**.
 - **Battery (BAT)**: 1-cell LiPo connected only to the charger.
 - **System power rail (SYS)**: the main rail that represents “the system is powered”.
   - SYS is sourced either from USB/BAT (via the charger PowerPath output) or from DC 9V (via a buck converter).
+- **+5V rail**: the normalized system power rail that is exported to EUB-BUS.
+- **+3V3 rail**: regulated 3.3V derived from +5V.
 - **EUB-BUS OUT**: Hearth’s only external output connector.
 
 ## 3. Power inputs (what the user sees)
@@ -32,21 +34,18 @@ Electrical policy (must hold true):
 - DC 9V is stepped down to the system rail (SYS-equivalent).
 - Battery charging remains exclusively handled by **USB via the charger**.
 
-## 4. Power path & switching (mutual exclusion)
-The system power sources are **mutually exclusive**:
-- Source A: USB/BAT system output (charger PowerPath output)
-- Source B: DC 9V buck output
+## 4. Power path & switching (multiple inputs → normalized +5V)
+Hearth may have multiple power inputs (USB / BAT via charger PowerPath, and optional DC 9V).
+Regardless of the active input, Hearth must provide a **normalized +5V rail** to EUB-BUS.
 
 Rules:
-- When **DC 9V is present**:
-  - System power (SYS) is supplied from DC 9V (via buck converter).
-  - The charger system output is **electrically disconnected** from SYS.
-  - USB may still be connected to charge the battery simultaneously.
+- USB / BAT / DC 9V may be connected in any combination.
+- Input priority and reverse-current blocking must be solved in hardware (ideal-diode / power-mux style).
 
 Implementation intent:
-- Use the DC jack’s detect contact **only as a control signal**.
+- Use the DC jack’s detect contact **only as a control signal** (if used).
 - Do **not** route system current through mechanical jack contacts.
-- Perform actual power isolation using FET / ideal-diode style power switching.
+- Prevent back-feeding between sources and prevent back-powering external equipment.
 
 ## 5. Battery policy (isolation)
 - The battery connects **only** to the charger.
@@ -57,32 +56,34 @@ Implementation intent:
 
 ### 6.1 Connector
 - Type: **JST XH series**
-- Pitch: **2.54mm**
-- Pins: **6**
+- Pitch: **2.5mm**
+- Pins: **5**
 - Board-side: **vertical header**
 - Cable-side: standard XH housing
 
-### 6.2 Pin order (Pin 1 → Pin 6)
+Pin 1 must be **GND** (square pad / silkscreen indicator).
+
+### 6.2 Pin order (Pin 1 → Pin 5)
 Pin numbering follows standard JST XH convention (Pin 1 marked by square pad / silkscreen indicator).
 
 | Pin | Name | Description |
 |---:|---|---|
 | 1 | GND | Ground |
-| 2 | SYS | Main system power rail (only rail that represents “system power”) |
-| 3 | +5V | Regulated 5V derived from SYS |
-| 4 | +3V3 | Regulated 3.3V derived from SYS |
-| 5 | USB_PGOOD_OD | USB input-good status, open-drain output |
-| 6 | CHG_STAT_OD | Battery charging status, open-drain output |
+| 2 | +5V | Main system power (normalized 5V, regardless of USB / DC 9V / BAT source) |
+| 3 | +3V3 | Regulated 3.3V derived from +5V |
+| 4 | PWRGOOD_OD | System power-good status (open-drain output) |
+| 5 | CHG_STAT_OD | Battery charging status (open-drain output) |
 
 ### 6.3 Electrical notes
-- +5V and +3V3 are always derived from SYS.
-- USB_PGOOD_OD indicates **USB input good**, not “system power good”.
+- SYS is an internal rail name and must not be exported on EUB-BUS.
+- +5V is the only exported “power rail contract” on EUB-BUS; +3V3 is derived from +5V.
+- PWRGOOD_OD indicates “**EUB-BUS +5V is valid (within spec)**”, regardless of which input source is active.
+- Hearth must not export any USB-only PGOOD signal to EUB-BUS.
 
-## 7. PGOOD / CHG signals (open-drain, no default pull-ups)
-- USB_PGOOD_OD and CHG_STAT_OD are exported as **open-drain** signals.
-- Hearth must **not** pull these up by default.
-- Pull-up resistors (e.g. 10k to +3V3) may exist as footprints only.
-  - Default assembly state: **DNP (Do Not Populate)**.
+## 7. PWRGOOD / CHG_STAT signals (open-drain, no pull-ups)
+- PWRGOOD_OD and CHG_STAT_OD are exported to EUB-BUS as **open-drain** signals.
+- Hearth must **not** pull these up (no onboard pull-ups).
+- The receiving device decides the logic voltage (e.g. pull up to +3V3 or +5V).
 
 Rationale:
 - The receiving device (e.g. Emiuet) decides the pull-up voltage and timing.

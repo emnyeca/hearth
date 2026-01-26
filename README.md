@@ -19,22 +19,21 @@ A **power core** for the EUB series.
 - PowerPath: automatic USB/battery switchover; power + charge while USB is connected
 - DC 9V policy: stepped down to system rail only; must NOT feed the charger input
 - Rails: SYS / +3V3 (LDO) / +5V (boost)
-- External output: EUB-BUS OUT (JST XH 2.54mm 6-pin)
+- External output: EUB-BUS OUT (JST XH 2.5mm 5-pin)
 
-### EUB-BUS OUT pinout (Pin 1 → Pin 6)
+### EUB-BUS OUT pinout (Pin 1 → Pin 5)
 
 | Pin | Signal |
 |---:|---|
 | 1 | GND |
-| 2 | SYS (main system power rail) |
-| 3 | +5V |
-| 4 | +3V3 |
-| 5 | USB_PGOOD_OD (USB input power-good, open-drain) |
-| 6 | CHG_STAT_OD (charging status, open-drain) |
+| 2 | +5V (main system power, normalized 5V) |
+| 3 | +3V3 (derived from +5V) |
+| 4 | PWRGOOD_OD (EUB-BUS +5V valid, open-drain) |
+| 5 | CHG_STAT_OD (charging status, open-drain) |
 
 Notes:
-- SYS is the only “system power” rail. +5V and +3V3 are always derived from SYS.
-- The two status signals are open-drain outputs. Hearth does not provide pull-ups by default (pull-up footprints exist but are DNP).
+- SYS is an internal rail name and is not exported on EUB-BUS.
+- Status signals are open-drain outputs. Hearth does not provide pull-ups; the receiving device pulls up to its logic voltage.
 
 ## Documents
 - Design intent / constraints: docs/design.md
