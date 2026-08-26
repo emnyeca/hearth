@@ -4,15 +4,20 @@
 	<img src="docs/assets/logo.png" width="420" alt="Hearth logo">
 </p>
 
-A **power core** for the EUB series.
+A standalone **power core and diagnostic supply** for the EUB series.
 
 - Designed for home use: prioritizes friendliness and peace-of-mind over ruggedness
 - **No MCU / no firmware (Rev0)**
 - Top requirement: everything should be diagnosable with only a **DMM (multimeter)**
 
 ## Goals
-- Provide power for Emiuet / gum synth / chord maker, etc.
+- Provide an optional power source for EUB prototypes, test loads, and accessories
 - Allow standalone bring-up and fault isolation
+
+Hearth is not required for normal Emiuet operation. Emiuet retains its own
+battery, charging, and system power architecture. Hearth may be used to compare
+power behavior or isolate a load during development, but that test arrangement
+does not define the released Emiuet architecture.
 
 ## Specs (Rev0 summary)
 - Inputs: USB-C (fixed 5V sink) / 1S LiPo (JST-PH 2-pin) / optional DC 9V (center-negative, power only)

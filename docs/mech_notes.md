@@ -1,8 +1,11 @@
 # Mechanical Notes（Rev0）
 
 ## 最優先
-- 上面パネル寸法：102.5 mm × 24.0 mm（Emiuet左パネル互換）
-- ネジ穴位置：Emiuet左パネルと同一
+- 上面パネル寸法：102.5 mm × 24.0 mm（Emiuet左パネルと寸法互換）
+- ネジ穴位置：Emiuet左パネルと同一（任意の機械的互換性）
+
+この互換性はHearth単体の形状規則であり、Emiuetへの外付けや接合を
+製品要件にはしない。EmiuetはHearthなしで完結する。
 
 ## サンド構造
 - 上パネルPCB（白+ENIG, 1.6mm）

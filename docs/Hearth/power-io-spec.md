@@ -4,7 +4,13 @@ This document is the **user-facing and engineering-facing** specification for He
 
 ## 1. What Hearth is
 Hearth is a **power core** for the EUB series.
-It is designed to validate and isolate the Emiuet power design while also serving as a reusable power + distribution unit for future EUB devices.
+It is a reusable standalone supply for EUB prototypes, test loads, and
+accessories. It can help isolate load-side faults or provide a comparison source
+during development.
+
+Hearth is not part of Emiuet's required operating architecture. Emiuet keeps
+its own battery, charger, power-path, and system rails; a successful test powered
+by Hearth does not validate Emiuet's internal power circuit.
 
 Rev0 has **no MCU / no firmware**.
 
@@ -86,5 +92,5 @@ Pin numbering follows standard JST XH convention (Pin 1 marked by square pad / s
 - The receiving device decides the logic voltage (e.g. pull up to +3V3 or +5V).
 
 Rationale:
-- The receiving device (e.g. Emiuet) decides the pull-up voltage and timing.
+- The receiving test load or EUB accessory decides the pull-up voltage and timing.
 - Avoids unexpected back-powering or “phantom powering” through status lines.
